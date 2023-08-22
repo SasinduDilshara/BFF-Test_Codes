@@ -14,7 +14,8 @@ public listener http:Listener megaportAPI = new (getPort(),
 }
 service / on megaportAPI {
     resource function get ships(http:RequestContext ctx) returns ShipmentEntry[]|error {
-        //TODO:When calling the other API, get the  token
+        //TODO:When calling the other API, get the  token, when creating the client, create the other backends from Ballerina as well.
+        // Can use a unsecure call for the frontend to this
         boolean isAuthorized = authorize(ctx, getScopes().get("view"));
         if !isAuthorized {
             return error("User is not authorized to view ships");

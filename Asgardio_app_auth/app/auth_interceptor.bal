@@ -2,6 +2,10 @@ import ballerina/http;
 import ballerina/jwt;
 import ballerina/log;
 
+//TODO: When no tolken, scenario, only login, register and other wanted pages.
+// when there is other page, asgardio page will retrigger.
+
+
 jwt:ValidatorConfig validatorConfig = {
     issuer: getIssuer(),
     audience: getAudience(),
@@ -16,6 +20,8 @@ jwt:ValidatorConfig validatorConfig = {
 service class AuthInterceptor {
     *http:RequestInterceptor;
     resource function 'default [string... path](http:RequestContext ctx, http:Request req, @http:Header string? authorization) returns http:NextService|http:Unauthorized|error? {
+        // TODO: can we replace this using ServiceConfig annotaions?
+        
         string? authHeader = authorization;
         if authHeader is () && req.method.equalsIgnoreCaseAscii(http:OPTIONS) {
             return ctx.next();
