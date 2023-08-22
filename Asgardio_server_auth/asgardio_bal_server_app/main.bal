@@ -14,6 +14,7 @@ public listener http:Listener megaportAPI = new (getPort(),
 }
 service / on megaportAPI {
     resource function get ships(http:RequestContext ctx) returns ShipmentEntry[]|error {
+        //TODO:When calling the other API, get the  token
         boolean isAuthorized = authorize(ctx, getScopes().get("view"));
         if !isAuthorized {
             return error("User is not authorized to view ships");
