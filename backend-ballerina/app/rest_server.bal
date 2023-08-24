@@ -1,3 +1,5 @@
+import ballerina/http;
+
 service /submit on 'listener {
     resource function post 'order(OrderInsert|OrderInsert[] 'orders) returns SubmitSuccessResponse|SubmitConflictResponse {
         string[]|error submitOrderResult = submitOrder('orders);
@@ -13,13 +15,19 @@ service /submit on 'listener {
 
     resource function post cargo(CargoInsert|CargoInsert[] cargos) returns SubmitSuccessResponse|SubmitConflictResponse {
         string[]|error submitCargoResult = submitCargo(cargos);
-        if submitCargoResult is string[] {
+        if submitCargoResult is error {
             return {
-                body: {insertedIds: submitCargoResult}
+                body: {message: submitCargoResult.message()}
             };
         }
+        if informCargoPartners(submitCargoResult) is error {
+            return {
+                body: {message: "Error while informing cargo partners"}
+            };
+        }
+
         return {
-            body: {message: submitCargoResult.message()}
+            body: {insertedIds: submitCargoResult}
         };
     }
 
@@ -58,4 +66,28 @@ service /submit on 'listener {
             body: {message: result.message()}
         };
     }
+}
+
+function informCargoPartners(string[] insertedCargoIds) returns error? {
+    string url;
+    from string id in insertedCargoIds
+        do {
+            Cargo cargo = check getCargo(id);
+            if cargo.'type == CARGO_WAVE {
+                url = cargowaveListnerUrl;
+            } else if cargo.'type == SHIPEX {
+                url = shipexListnerUrl;
+            } else {
+                url = tradelogixListnerUrl;
+            }
+
+            http:Client 'client = check new(url);
+            http:Response|error res = 'client->post("/submit", cargo);
+            if res is http:Response {
+                if res.statusCode == 200 {
+                    return ();
+                }
+                return error("Error while informing cargo partners");
+            }
+        };
 }
