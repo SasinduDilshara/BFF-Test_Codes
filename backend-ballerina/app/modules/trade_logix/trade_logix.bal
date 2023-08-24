@@ -1,10 +1,10 @@
-# Returns the string `Hello` with the input string name.
-#
-# + name - name as a string
-# + return - "Hello, " with the input string name
-public function hello(string name) returns string {
-    if !(name is "") {
-        return "Hello, " + name;
+import ballerina/log;
+import ballerina/http;
+
+listener http:Listener tradelogixListner = check new(9093);
+
+service /tradelogix on tradelogixListner {
+    resource function post submit() {
+        log:printInfo("New cargo was successfully register to the megaport");
     }
-    return "Hello, World!";
 }
