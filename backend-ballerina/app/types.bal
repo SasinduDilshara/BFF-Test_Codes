@@ -43,22 +43,19 @@ public type QueryConflictResponse record {|
 |};
 
 public type QueryOrdersSuccessResponse record {|
-    *http:Ok;
-    record {
+    record {|
         Order[] orders;
-    } body;
+    |} body;
 |};
 
 public type QueryCargosSuccessResponse record {|
-    *http:Ok;
-    record {
+    record {|
         Cargo[] cargos;
-    } body;
+    |} body;
 |};
 
 public type QueryItemsSuccessResponse record {|
-    *http:Ok;
-    record {
+    record {|
         Item[] items;
-    } body;
+    |} body;
 |};

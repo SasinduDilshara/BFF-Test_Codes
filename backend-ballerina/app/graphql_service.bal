@@ -1,111 +1,42 @@
-// import ballerina/persist;
-
-service /get on 'graphqlListener {
-    resource function get orders() returns QueryOrdersSuccessResponse|QueryConflictResponse {
+service /get on graphqlListener {
+    resource function get orders() returns Order[]|error {
         Order[]|error 'orders = from var 'order in getOrders()
             select 'order;
 
-        if ('orders is error) {
-            return {
-                body: {
-                    message: 'orders.message()
-                }
-            };
-        }
-        return {
-            body: {
-                orders: 'orders
-            }
-        };
+        return 'orders;
     }
 
-    resource function get cargos() returns QueryCargosSuccessResponse|QueryConflictResponse {
+    resource function get cargos() returns Cargo[]|error {
         Cargo[]|error 'cargos = from var 'cargo in getCargos()
             select 'cargo;
 
-        if ('cargos is error) {
-            return {
-                body: {
-                    message: 'cargos.message()
-                }
-            };
-        }
-        return {
-            body: {
-                cargos: 'cargos
-            }
-        };
+        return 'cargos;
     }
 
-    resource function get items() returns QueryItemsSuccessResponse|QueryConflictResponse {
+    resource function get items() returns Item[]|error {
         Item[]|error 'items = from var 'item in getItems()
             select 'item;
 
-        if ('items is error) {
-            return {
-                body: {
-                    message: 'items.message()
-                }
-            };
-        }
-        return {
-            body: {
-                items: 'items
-            }
-        };
+        return 'items;
     }
 
-    resource function get cargos/[CargoType 'type]() returns QueryCargosSuccessResponse|QueryConflictResponse {
+    resource function get cargosByType(CargoType 'type) returns Cargo[]|error {
         Cargo[]|error 'cargos = from var 'cargo in getCargosByType('type)
             select 'cargo;
-
-        if ('cargos is error) {
-            return {
-                body: {
-                    message: 'cargos.message()
-                }
-            };
-        }
-        return {
-            body: {
-                cargos: 'cargos
-            }
-        };
+        return 'cargos;
     }
 
-    resource function get orders/[string cargoId]() returns QueryOrdersSuccessResponse|QueryConflictResponse {
-        Order[]|error 'orders = from var 'order in getOrdersByCargo(cargoId)
+    resource function get ordersById(string orderId) returns Order[]|error {
+        Order[]|error 'orders = from var 'order in getOrdersByCargo(orderId)
             select 'order;
 
-        if ('orders is error) {
-            return {
-                body: {
-                    message: 'orders.message()
-                }
-            };
-        }
-        return {
-            body: {
-                orders: 'orders
-            }
-        };
+        return 'orders;
     }
 
-    resource function get items/[string orderId]() returns QueryItemsSuccessResponse|QueryConflictResponse {
-        Item[]|error 'items = from var 'item in getItemsByOrder(orderId)
+    resource function get itemsById(string itemId) returns Item[]|error {
+        Item[]|error 'items = from var 'item in getItemsByOrder(itemId)
             select 'item;
 
-        if ('items is error) {
-            return {
-                body: {
-                    message: 'items.message()
-                }
-            };
-        }
-        return {
-            body: {
-                items: 'items
-            }
-        };
+        return 'items;
     }
 }

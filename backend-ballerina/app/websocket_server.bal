@@ -1,16 +1,21 @@
 import ballerina/websocket;
 
-service /ws on graphqlListener {
-    resource function get order\-status/[string orderId]() returns websocket:Service {
-        return new OrderService(orderId);
-    }
+enum wsType {
+    ORDER_TYPE,
+    CARGO_TYPE
+}
 
-    resource function get cargo\-status/[string cargoId]() returns websocket:Service {
-        return new CargoService(cargoId);
+service /ws on wsListener {
+    resource function get .(string id, wsType 'type) returns websocket:Service {
+        if 'type == ORDER_TYPE {
+            return new OrderService(id);
+        } else {
+            return new CargoService(id);
+        }
     }
 }
 
-service class OrderService {
+distinct service class OrderService {
     *websocket:Service;
     string orderId;
 
@@ -27,7 +32,7 @@ service class OrderService {
     }
 }
 
-service class CargoService {
+distinct service class CargoService {
     *websocket:Service;
     string cargoId;
 

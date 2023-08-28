@@ -1,0 +1,32 @@
+type Query {
+    products: Product[] // get resource
+}
+
+// mutation 
+// subcription
+
+type Product {
+    id: String!;
+    name(isCap: boolean!): String;
+
+}
+
+type Product record {|
+    string id;
+    string? name;
+|}
+
+distict class Product {
+    resource function get id() returns string => "";
+    resource function get name(boolean isCap) return string? {
+
+    }
+}
+
+
+
+service on new graphql:Listner() {
+    resource function get products() return Product[]|error {
+
+    }
+}

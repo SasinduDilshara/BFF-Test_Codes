@@ -1,5 +1,4 @@
 import ballerina/persist as _;
-import ballerina/time;
 
 public enum OrderStatus {
     PENDING,
@@ -36,14 +35,14 @@ public type Order record {|
     Item[] items;
     float totalAmount;
     string shipId;
-    time:Date date;
-    time:Civil eta;
+    string date;
+    string eta;
     OrderStatus status;
 |};
 
 public type Cargo record {|
     readonly string cargoId;
-    time:Civil eta;
+    string eta;
     ShipStatus status;
     CargoType 'type;
     string startFrom;
