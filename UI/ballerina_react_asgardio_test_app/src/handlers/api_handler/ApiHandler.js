@@ -17,12 +17,3 @@ export const postAPI = async ( url, data, config) => {
         return error;
     }
 }
-
-export const getGraphQLAPI = async (url, query) => {
-    try {
-        const response = await axios.get(url, {query: query});
-        return response.data;
-    } catch (error) {
-        return error;
-    }
-}

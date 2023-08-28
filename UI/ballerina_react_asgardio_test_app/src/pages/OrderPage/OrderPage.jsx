@@ -1,34 +1,23 @@
 import React from 'react';
-import { getAPI, getGraphQLAPI } from '../../handlers/api_handler/ApiHandler';
-import { getOrdersUrl, getOrdersQuery } from '../../handlers/api_handler/Constants';
+import { getOrdersQuery } from '../../handlers/api_handler/Constants';
 import OrderItem from '../../components/OrderItem/OrderItem';
+import { useQuery } from '@apollo/client';
 
 export default function OrderPage() {
-    const [data, setData] = useState([]);
-    const [loading, isLoading] = useState(false);
+    const { loading, error, data } = useQuery(getOrdersQuery);
 
-    useEffect(() => {
-        isLoading(true);
-        async function fetchData() {
-            try {
-                const response = await getGraphQLAPI(getOrdersUrl, getOrdersQuery);
-                setData(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-        fetchData();
-        isLoading(false);
-    }, []);
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+    console.log("DATA", data);
 
     return (
         loading ?
             <div>Loading...</div>
             :
             <div>
-                <h1>Data from API</h1>
+                <h1>Orders</h1>
                 <ul>
-                    {data.map(item => (
+                    {data.orders.map(item => (
                         <OrderItem item={item} />
                     ))}
                 </ul>

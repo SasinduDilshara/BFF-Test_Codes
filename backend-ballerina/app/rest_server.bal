@@ -1,7 +1,15 @@
 import ballerina/http;
 
+@http:ServiceConfig {
+    cors: {
+        allowOrigins: ["*"],
+        allowMethods: ["OPTIONS", "GET", "POST"],
+        allowCredentials: false,
+        allowHeaders: ["*"]
+    }
+}
 service /submit on 'listener {
-    resource function post 'order(OrderInsert|OrderInsert[] 'orders) returns SubmitSuccessResponse|SubmitConflictResponse {
+    resource function post 'order(OrderRecordInsert|OrderRecordInsert[] 'orders) returns SubmitSuccessResponse|SubmitConflictResponse {
         string[]|error submitOrderResult = submitOrder('orders);
         if submitOrderResult is string[] {
             return {
@@ -44,8 +52,8 @@ service /submit on 'listener {
     }
 
     resource function post 'assign\-order(string cargoId, string orderId) returns OrderAssignSuccessResponse|AssignConflictResponse {
-        Order|error result = assignOrderToCargo(cargoId, orderId);
-        if result is Order {
+        OrderRecord|error result = assignOrderToCargo(cargoId, orderId);
+        if result is OrderRecord {
             return {
                 body: {'order: result}
             };
@@ -71,23 +79,23 @@ service /submit on 'listener {
 function informCargoPartners(string[] insertedCargoIds) returns error? {
     string url;
     from string id in insertedCargoIds
-        do {
-            Cargo cargo = check getCargo(id);
-            if cargo.'type == CARGO_WAVE {
-                url = cargowaveListnerUrl;
-            } else if cargo.'type == SHIPEX {
-                url = shipexListnerUrl;
-            } else {
-                url = tradelogixListnerUrl;
-            }
+    do {
+        Cargo cargo = check getCargo(id);
+        if cargo.'type == CARGO_WAVE {
+            url = cargowaveListnerUrl;
+        } else if cargo.'type == SHIPEX {
+            url = shipexListnerUrl;
+        } else {
+            url = tradelogixListnerUrl;
+        }
 
-            http:Client 'client = check new(url);
-            http:Response|error res = 'client->post("/submit", cargo);
-            if res is http:Response {
-                if res.statusCode == 200 {
-                    return ();
-                }
-                return error("Error while informing cargo partners");
+        http:Client 'client = check new (url);
+        http:Response|error res = 'client->post("/submit", cargo);
+        if res is http:Response {
+            if res.statusCode == 200 {
+                return ();
             }
-        };
+            return error("Error while informing cargo partners");
+        }
+    };
 }

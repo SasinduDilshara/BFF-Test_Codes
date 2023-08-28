@@ -2,14 +2,14 @@ import ballerina/persist;
 
 Client sClient = check new ();
 
-public function submitOrder(OrderInsert|OrderInsert[] orderData) returns string[]|error {
-    OrderInsert[] 'orders = [];
-    if (orderData is OrderInsert) {
+public function submitOrder(OrderRecordInsert|OrderRecordInsert[] orderData) returns string[]|error {
+    OrderRecordInsert[] 'orders = [];
+    if (orderData is OrderRecordInsert) {
         'orders = [orderData];
     } else {
         'orders = orderData;
     }
-    return <string[]> check sClient->/orders.post('orders);
+    return <string[]> check sClient->/orderrecords.post('orders);
 }
 
 public function submitCargo(CargoInsert|CargoInsert[] cargoData) returns string[]|error {
@@ -32,8 +32,8 @@ public function submitItem(ItemInsert|ItemInsert[] itemData) returns string[]|er
     return <string[]> check sClient->/items.post(items);
 }
 
-public function getOrders() returns stream<'Order, persist:Error?> {
-     return sClient->/orders;
+public function getOrders() returns stream<OrderRecord, persist:Error?> {
+     return sClient->/orderrecords;
 }
 
 public function getCargos() returns stream<'Cargo, persist:Error?> {
@@ -44,8 +44,8 @@ public function getItems() returns stream<'Item, persist:Error?> {
      return sClient->/items;
 }
 
-public function getOrder(string id) returns 'Order|error {
-    return check sClient->/orders/[id];
+public function getOrder(string id) returns OrderRecord|error {
+    return check sClient->/orderrecords/[id];
 }
 
 public function getCargo(string id) returns 'Cargo|error {
@@ -69,8 +69,8 @@ public function assignItemToOrder(string orderId, string itemId) returns Item|er
     });
 }
 
-public function assignOrderToCargo(string shipId, string orderId) returns Order|error {
-    return check sClient->/orders/[orderId].put({shipId});
+public function assignOrderToCargo(string shipId, string orderId) returns OrderRecord|error {
+    return check sClient->/orderrecords/[orderId].put({shipId});
 }
 
 public function getItemsByOrder(string orderId) returns stream<Item, persist:Error?> {
@@ -80,8 +80,8 @@ public function getItemsByOrder(string orderId) returns stream<Item, persist:Err
         select item;
 }
 
-public function getOrdersByCargo(string shipId) returns stream<Order, persist:Error?> {
-    stream<Order, persist:Error?> orders = sClient->/orders;
+public function getOrdersByCargo(string shipId) returns stream<OrderRecord, persist:Error?> {
+    stream<OrderRecord, persist:Error?> orders = sClient->/orderrecords;
     return from var 'order in orders
         where 'order.shipId == shipId
         select 'order;

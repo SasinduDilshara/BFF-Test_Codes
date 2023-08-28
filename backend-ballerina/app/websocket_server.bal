@@ -24,7 +24,7 @@ distinct service class OrderService {
     }
 
     remote function onMessage(websocket:Caller caller, string chatMessage) returns error? {
-        Order|error orderResult = getOrder(self.orderId);
+        OrderRecord|error orderResult = getOrder(self.orderId);
         if orderResult is error {
             return caller->writeTextMessage(string `Something went wrong! - ${orderResult.toString()}`);
         }

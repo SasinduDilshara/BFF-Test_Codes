@@ -1,49 +1,49 @@
-export const serverUrl = "http://localhost:3000";
+import gql from 'graphql-tag';
+
+export const serverUrl = "http://localhost:9090";
 
 // POST requests
-export const submitCargoUrl = "/submit/cargo";
-export const submitOrderUrl = "/submit/order";
-export const submitItemUrl = "/submit/item";
-export const submitAssignItemUrl = "/submit/assign-item";
-export const submitAssignOrderUrl = "/submit/assign-order";
+export const submitCargoUrl = serverUrl + "/submit/cargo";
+export const submitOrderUrl = serverUrl + "/submit/order";
+export const submitItemUrl = serverUrl + "/submit/item";
+export const submitAssignItemUrl = serverUrl + "/submit/assign-item";
+export const submitAssignOrderUrl = serverUrl + "/submit/assign-order";
 
 // GET requests
-export const getCargosUrl = "/get/cargos";
-export const getOrdersUrl = "/get/orders";
-export const getItemsUrl = "/get/items";
-export const getCargoStatusUrl = "/ws/cargo-status";
-export const getOrderStatusUrl = "/ws/order-status";
+export const getGraphQlUrl = serverUrl + "/get";
+export const getCargoStatusUrl = serverUrl + "/ws/cargo-status";
+export const getOrderStatusUrl = serverUrl + "/ws/order-status";
 
 // GraphQL queries
 
-export const getOrdersQuery =  {
-    orders() {
-        orderId
-        amount
-        shipId
-        eta
-    }
-};
-
-export const getItemsQuery =  {
-    orders() {
-        price
-        name
-        order: {
+export const getOrdersQuery =
+    gql`query {
+            orders {
             orderId
-            amount
+            totalAmount
             shipId
             eta
         }
-    }
-};
+    }`;
 
-export const getCargosQuery =  {
-    cargos() {
-        cargoId
-        startFrtom
-        endfrom
-        eta
-        type
-    }
-};
+export const getCargosQuery =
+    gql`query {
+        cargos {
+            cargoId
+            startFrom
+            endFrom
+            eta
+            type
+            volume
+            eta
+        }
+    }`;
+
+export const getItemsQuery =
+    gql`query {
+        items {
+            itemId
+            name
+            price
+        }
+    }`;

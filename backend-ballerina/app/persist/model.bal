@@ -26,15 +26,15 @@ public type Item record {|
     readonly string itemId;
     string name;
     float price;
-	Order 'order;
+	OrderRecord 'order;
 |};
 
-public type Order record {|
+public type OrderRecord record {|
     readonly string orderId;
     string customerId;
     Item[] items;
     float totalAmount;
-    string shipId;
+    string? shipId;
     string date;
     string eta;
     OrderStatus status;
@@ -46,6 +46,6 @@ public type Cargo record {|
     ShipStatus status;
     CargoType 'type;
     string startFrom;
-    string endFrom;
+    string? endFrom;
     float volume;
 |};

@@ -24,7 +24,7 @@ public type AssignConflictResponse record {|
 public type OrderAssignSuccessResponse record {|
     *http:Ok;
     record {
-        Order 'order;
+        OrderRecord 'order;
     } body;
 |};
 
@@ -44,7 +44,7 @@ public type QueryConflictResponse record {|
 
 public type QueryOrdersSuccessResponse record {|
     record {|
-        Order[] orders;
+        OrderRecord[] orders;
     |} body;
 |};
 

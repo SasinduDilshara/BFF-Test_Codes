@@ -1,6 +1,13 @@
+import ballerina/graphql;
+
+@graphql:ServiceConfig {
+    cors: {
+        allowOrigins: ["*"]
+    }
+}
 service /get on graphqlListener {
-    resource function get orders() returns Order[]|error {
-        Order[]|error 'orders = from var 'order in getOrders()
+    resource function get orders() returns OrderRecord[]|error {
+        OrderRecord[]|error 'orders = from var 'order in getOrders()
             select 'order;
 
         return 'orders;
@@ -26,8 +33,8 @@ service /get on graphqlListener {
         return 'cargos;
     }
 
-    resource function get ordersById(string orderId) returns Order[]|error {
-        Order[]|error 'orders = from var 'order in getOrdersByCargo(orderId)
+    resource function get ordersById(string orderId) returns OrderRecord[]|error {
+        OrderRecord[]|error 'orders = from var 'order in getOrdersByCargo(orderId)
             select 'order;
 
         return 'orders;
