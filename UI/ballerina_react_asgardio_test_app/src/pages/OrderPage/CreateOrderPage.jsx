@@ -3,38 +3,41 @@ import {
   Typography,
   TextField,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Grid,
   Container,
   Paper,
 } from '@mui/material';
+import { postAPI } from '../../handlers/api_handler/ApiHandler';
+import { submitOrderUrl } from '../../handlers/api_handler/Constants';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 const CreateOrderPage = () => {
   const [date, setDate] = useState('');
-  const [estimationTime, setEstimationTime] = useState('');
-  const [username, setUsername] = useState('');
-  const [selectedItems, setSelectedItems] = useState([]);
-  const allItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  const [eta, setEstimationTime] = useState('');
+  const [customerId, setUsername] = useState('');
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
-  const handleItemSelect = event => {
-    const { value } = event.target;
-    setSelectedItems(prevItems => [...prevItems, value]);
-  };
+  // const handleItemSelect = event => {
+  //   const { value } = event.target;
+  //   setSelectedItems(prevItems => [...prevItems, value]);
+  // };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     // Handle form submission here
-    console.log('Form submitted:', { date, estimationTime, username, selectedItems });
-    const response = 
-  };
+    console.log('Form submitted:', { date, eta, customerId, totalAmount: 0, status: 'PENDING' });
+    const response = await postAPI(submitOrderUrl, { date, eta, customerId, totalAmount: 0, status: 'PENDING', shipId: null, orderId: uuidv4()});
+    if (response.error) {
+      setError(true);
+    } else {
+      setError(false);
+      navigate('/orders');
+    }
+  };  
 
   return (
+    error? <div>Something went wrong</div> :
     <Container component="main" maxWidth="xs">
       <Paper elevation={3} style={{ padding: '20px' }}>
         <Typography variant="h5" align="center">
@@ -57,7 +60,7 @@ const CreateOrderPage = () => {
             margin="normal"
             label="Estimation Time Arrival"
             type="time"
-            value={estimationTime}
+            value={eta}
             onChange={e => setEstimationTime(e.target.value)}
             InputLabelProps={{
               shrink: true,
@@ -67,10 +70,10 @@ const CreateOrderPage = () => {
             fullWidth
             margin="normal"
             label="Username"
-            value={username}
+            value={customerId}
             onChange={e => setUsername(e.target.value)}
           />
-          <FormControl fullWidth margin="normal">
+          {/* <FormControl fullWidth margin="normal">
             <InputLabel>Items</InputLabel>
             <Select
               multiple
@@ -85,7 +88,7 @@ const CreateOrderPage = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
           <Button type="submit" fullWidth variant="contained" color="primary">
             Register Order
           </Button>

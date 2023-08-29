@@ -17,9 +17,9 @@ public enum ShipStatus {
 };
 
 public enum CargoType {
-    SHIPEX,
-    CARGO_WAVE,
-    TRADDE_LOGIX
+    SHIPEX = "ShipEx",
+    CARGO_WAVE = "CargoWave",
+    TRADE_LOGIX = "TradeLogix"
 };
 
 public type Item record {|
@@ -42,10 +42,10 @@ public type OrderRecord record {|
 
 public type Cargo record {|
     readonly string cargoId;
-    string eta;
+    string? eta;
     ShipStatus status;
     CargoType 'type;
     string startFrom;
     string? endFrom;
-    float volume;
+    string volume;
 |};

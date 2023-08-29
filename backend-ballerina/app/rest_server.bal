@@ -2,10 +2,7 @@ import ballerina/http;
 
 @http:ServiceConfig {
     cors: {
-        allowOrigins: ["*"],
-        allowMethods: ["OPTIONS", "GET", "POST"],
-        allowCredentials: false,
-        allowHeaders: ["*"]
+        allowOrigins: ["*"]
     }
 }
 service /submit on 'listener {

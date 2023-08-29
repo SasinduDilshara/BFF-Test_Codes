@@ -12,8 +12,8 @@ export const getAPI = async ( url, config) => {
 export const postAPI = async ( url, data, config) => {
     try {
         const response = await axios.post(url, data, config);
-        return response.data;
+        return {data: response.data, error: false};
     } catch (error) {
-        return error;
+        throw {error: true, data: error};
     }
 }

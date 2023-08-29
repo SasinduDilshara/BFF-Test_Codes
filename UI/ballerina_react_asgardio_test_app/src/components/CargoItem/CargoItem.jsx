@@ -1,5 +1,5 @@
 export default function CargoItem({item}) {
     return (
-        <li key={item.orderId}>{item.orderId},{item.amount},{item.shipId},{item.eta}</li>
+        <li key={item.cargoId}>{item.cargoId},{item.etaa},{item.startFrom},{item.volume},{item.endFrom}</li>
     );
 }
