@@ -1,3 +1,5 @@
+import ballerina/lang.runtime;
+import ballerina/log;
 import ballerina/websocket;
 
 enum wsType {
@@ -40,11 +42,21 @@ distinct service class CargoService {
         self.cargoId = cargoId;
     }
 
-    remote function onMessage(websocket:Caller caller, string chatMessage) returns error? {
-        Cargo|error cargoResult = getCargo(self.cargoId);
-        if cargoResult is error {
-            return caller->writeTextMessage(string `Something went wrong! - ${cargoResult.toString()}`);
+    remote function onOpen(websocket:Caller caller) {
+        while true {
+            Cargo|error cargoResult = getCargo(self.cargoId);
+            if cargoResult is error {
+                error? e = caller->writeTextMessage(string `Something went wrong! - ${cargoResult.toString()}`);
+                if e is error {
+                    log:printError("Error", e);
+                }            
+            } else {
+                error? e = caller->writeTextMessage(string `Order status is ${cargoResult.status}`);
+                if e is error {
+                    log:printError("Error", e);
+                }            
+            }
+            runtime:sleep(100);
         }
-        return caller->writeTextMessage(string `Order status is ${cargoResult.status}`);
     }
 }
