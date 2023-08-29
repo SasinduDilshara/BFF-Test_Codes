@@ -54,7 +54,6 @@ distinct service class CargoService {
 
     remote function onOpen(websocket:Caller caller) {
         while true {
-            log:printInfo("Sending cargo status to client");
             Cargo|error cargoResult = getCargo(self.cargoId);
             if cargoResult is error {
                 error? e = caller->writeTextMessage(string `Something went wrong! - ${cargoResult.toString()}`);
@@ -62,7 +61,7 @@ distinct service class CargoService {
                     log:printError("Error", e);
                 }            
             } else {
-                error? e = caller->writeTextMessage(string `Order status is ${cargoResult.status}`);
+                error? e = caller->writeTextMessage(cargoResult.status);
                 if e is error {
                     log:printError("Error", e);
                 }            
