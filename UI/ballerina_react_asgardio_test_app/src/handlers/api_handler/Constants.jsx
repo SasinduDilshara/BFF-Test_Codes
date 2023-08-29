@@ -23,6 +23,7 @@ export const getOrdersQuery =
             totalAmount
             shipId
             eta
+            customerId
         }
     }`;
 

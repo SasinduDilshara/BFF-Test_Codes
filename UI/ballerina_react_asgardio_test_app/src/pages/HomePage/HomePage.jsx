@@ -40,6 +40,6 @@ function LoggedUserHomePage() {
         <CustomButton color="primary" onClick={() => {navigate("/orders")}} disabled={false} label={"order"} size={'large'}/>
         <CustomButton color="primary" onClick={() => {navigate("/create-order")}} disabled={false} label={"Create a Order"} size={'large'}/>
         <CustomButton color="primary" onClick={() => {navigate("/cargos")}} disabled={false} label={"cargo"} size={'large'}/>
-        <CustomButton color="primary" onClick={() => {navigate("/create-cargo")}} disabled={false} label={"Submit a Order"} size={'large'}/>
+        <CustomButton color="primary" onClick={() => {navigate("/create-cargo")}} disabled={false} label={"Submit a Cargo"} size={'large'}/>
     </React.Fragment >
 }

@@ -1,14 +1,18 @@
-import { Grid } from "@mui/material";
+import { TableRow, TableCell } from "@mui/material";
 
-export default function OrderItem({item}) {
+export default function OrderItem({ row }) {
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <h3>Order ID: {item.orderId}</h3>
-                <p>Amount: {item.amount}</p>
-                <p>Ship ID: {item.shipId}</p>
-                <p>ETA: {item.eta}</p>
-            </Grid>
-        </Grid>
+        <TableRow
+            key={row.orderId}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+        >
+            <TableCell component="th" scope="row">
+                {row.orderId}
+            </TableCell>
+            <TableCell align="right">{row.status}</TableCell>
+            <TableCell align="right">{row.shipId}</TableCell>
+            <TableCell align="right">{row.eta}</TableCell>
+            <TableCell align="right">{row.customerId}</TableCell>
+        </TableRow>
     );
 }
