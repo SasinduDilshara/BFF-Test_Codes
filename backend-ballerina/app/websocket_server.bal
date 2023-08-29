@@ -25,12 +25,23 @@ distinct service class OrderService {
         self.orderId = orderId;
     }
 
-    remote function onMessage(websocket:Caller caller, string chatMessage) returns error? {
-        OrderRecord|error orderResult = getOrder(self.orderId);
-        if orderResult is error {
-            return caller->writeTextMessage(string `Something went wrong! - ${orderResult.toString()}`);
+    remote function onOpen(websocket:Caller caller) {
+        while true {
+            log:printInfo("Sending order status to client");
+            OrderRecord|error orderResult = getOrder(self.orderId);
+            if orderResult is error {
+                error? e = caller->writeTextMessage(string `Something went wrong! - ${orderResult.toString()}`);
+                if e is error {
+                    log:printError("Error", e);
+                }            
+            } else {
+                error? e = caller->writeTextMessage(string `Order status is ${orderResult.status}`);
+                if e is error {
+                    log:printError("Error", e);
+                }            
+            }
+            runtime:sleep(100);
         }
-        return caller->writeTextMessage(string `Order status is ${orderResult.status}`);
     }
 }
 
@@ -44,6 +55,7 @@ distinct service class CargoService {
 
     remote function onOpen(websocket:Caller caller) {
         while true {
+            log:printInfo("Sending cargo status to client");
             Cargo|error cargoResult = getCargo(self.cargoId);
             if cargoResult is error {
                 error? e = caller->writeTextMessage(string `Something went wrong! - ${cargoResult.toString()}`);
