@@ -8,7 +8,7 @@ enum wsType {
 }
 
 service /ws on wsListener {
-    resource function get .(string id, wsType 'type) returns websocket:Service {
+    resource function get .(string id, string 'type) returns websocket:Service {
         if 'type == ORDER_TYPE {
             return new OrderService(id);
         } else {
@@ -27,7 +27,6 @@ distinct service class OrderService {
 
     remote function onOpen(websocket:Caller caller) {
         while true {
-            log:printInfo("Sending order status to client");
             OrderRecord|error orderResult = getOrder(self.orderId);
             if orderResult is error {
                 error? e = caller->writeTextMessage(string `Something went wrong! - ${orderResult.toString()}`);
@@ -35,7 +34,7 @@ distinct service class OrderService {
                     log:printError("Error", e);
                 }            
             } else {
-                error? e = caller->writeTextMessage(string `Order status is ${orderResult.status}`);
+                error? e = caller->writeTextMessage(orderResult.status);
                 if e is error {
                     log:printError("Error", e);
                 }            

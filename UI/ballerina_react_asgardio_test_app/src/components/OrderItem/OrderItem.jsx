@@ -4,11 +4,10 @@ import { wsConnectionUrl } from "../../handlers/api_handler/Constants";
 
 export default function OrderItem({ row }) {
     const [message, setMessage] = useState("");
-    const socket = new WebSocket(wsConnectionUrl);
+    const socket = new WebSocket(wsConnectionUrl + "?id=" + row.orderId.toString() + "&type=ORDER_TYPE");
   
     useEffect(() => {
       socket.addEventListener('message', event => {
-        console.log("EVENT : ", event.data)
         setMessage(event.data);
       });
     //   return () => {
@@ -25,7 +24,7 @@ export default function OrderItem({ row }) {
                 {row.orderId}
             </TableCell>
             <TableCell align="right">{message == "" ? "---" : message}</TableCell>
-            <TableCell align="right">{row.shipId}</TableCell>
+            <TableCell align="right">{row.shipId == null ? "Not Assigned": row.shipId}</TableCell>
             <TableCell align="right">{row.eta}</TableCell>
             <TableCell align="right">{row.customerId}</TableCell>
         </TableRow>

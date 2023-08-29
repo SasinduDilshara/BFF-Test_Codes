@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const serverUrl = "http://localhost:9090";
-export const serverSocketUrl = "ws://localhost:9090";
+export const serverSocketUrl = "ws://localhost:9091";
 
 // POST requests
 export const submitCargoUrl = serverUrl + "/submit/cargo";
