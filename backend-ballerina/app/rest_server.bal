@@ -120,7 +120,7 @@ function informCargoPartners(string[] insertedCargoIds) returns error? {
         http:Client 'client = check new (url);
         http:Response|error res = 'client->post("/submit", cargo);
         if res is http:Response {
-            if res.statusCode == 200 {
+            if res.statusCode == 202 {
                 return ();
             }
             return error("Error while informing cargo partners");
