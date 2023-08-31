@@ -61,7 +61,7 @@ distinct service class CargoService {
                     log:printError("Error", e);
                 }            
             } else {
-                error? e = caller->writeTextMessage(cargoResult.status);
+                error? e = caller->writeTextMessage(string `${cargoResult.lon}, ${cargoResult.lat}`);
                 if e is error {
                     log:printError("Error", e);
                 }            

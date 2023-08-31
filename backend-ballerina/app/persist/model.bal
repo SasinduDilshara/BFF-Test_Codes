@@ -44,6 +44,8 @@ public type Cargo record {|
     readonly string cargoId;
     string? eta;
     ShipStatus status;
+    string lat;
+    string lon;
     CargoType 'type;
     string startFrom;
     string? endFrom;

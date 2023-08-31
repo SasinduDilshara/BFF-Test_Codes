@@ -22,13 +22,15 @@ const CreateCargoPage = () => {
   const [type, setType] = useState('');
   const [startFrom, setStartFrom] = useState('');
   const [endFrom, setEndFrom] = useState('');
+  const [lon, setLon] = useState('');
+  const [lat, setLat] = useState('');
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const { getAccessToken } = useAuthContext();
 
   const handleSubmit = async event => {
     event.preventDefault();
-    const response = await postAPI(submitCargoUrl, { volume, type, startFrom, endFrom, cargoId: uuidv4(), eta: null, status: 'DOCKED'}, {headers: {"Authorization" : `Bearer ${await getAccessToken()}`}}
+    const response = await postAPI(submitCargoUrl, { volume, type, startFrom, endFrom, cargoId: uuidv4(), eta: null, status: 'DOCKED', lat, lon}, {headers: {"Authorization" : `Bearer ${await getAccessToken()}`}}
     );
     if (response.error) {
       setError(true);
@@ -79,6 +81,20 @@ const CreateCargoPage = () => {
             label="End From"
             value={endFrom}
             onChange={e => setEndFrom(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Longitude"
+            value={lon}
+            onChange={e => setLon(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Latitude"
+            value={lat}
+            onChange={e => setLat(e.target.value)}
           />
           <Button type="submit" fullWidth variant="contained" color="primary">
             Create Cargo

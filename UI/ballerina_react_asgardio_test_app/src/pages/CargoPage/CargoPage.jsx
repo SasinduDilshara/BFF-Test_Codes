@@ -30,7 +30,7 @@ export default function CargoPage() {
                         <TableCell align="right">startFrom</TableCell>
                         <TableCell align="right">volume Time Arrival</TableCell>
                         <TableCell align="right">End From</TableCell>
-                        <TableCell align="right">Status</TableCell>
+                        <TableCell align="right">Location</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
