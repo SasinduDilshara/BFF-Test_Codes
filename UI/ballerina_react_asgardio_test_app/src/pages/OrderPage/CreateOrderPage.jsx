@@ -19,7 +19,7 @@ const CreateOrderPage = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  const { getAccessToken, state } = useAuthContext();
+  const { getAccessToken } = useAuthContext();
 
   // const handleItemSelect = event => {
   //   const { value } = event.target;
@@ -28,10 +28,9 @@ const CreateOrderPage = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', { date, eta, customerId, totalAmount: 0, status: 'PENDING' });
-    console.log(await getAccessToken())
-    const response = await postAPI(submitOrderUrl, { date, eta, customerId, totalAmount: 0, status: 'PENDING', shipId: null, orderId: uuidv4()}, {token: await getAccessToken()});
+    const response = await postAPI(submitOrderUrl, { date, eta, customerId, totalAmount: 0, status: 'PENDING', shipId: null, orderId: uuidv4()},
+    {headers: {"Authorization" : `Bearer ${await getAccessToken()}`}}
+  );
     if (response.error) {
       setError(true);
     } else {
