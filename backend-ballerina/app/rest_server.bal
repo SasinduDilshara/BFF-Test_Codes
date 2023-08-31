@@ -31,6 +31,24 @@ service /submit on 'listener {
         };
     }
 
+    @http:ResourceConfig {
+        cors: {
+            allowOrigins: ["*"]
+        },
+        auth: [
+            {
+                jwtValidatorConfig: {
+                    issuer: getIssuer(),
+                    audience: getAudience(),
+                    signatureConfig: {
+                        jwksConfig: {
+                            url: getJwksUrl()
+                        }
+                    }
+                }
+            }
+        ]
+    }
     resource function post cargo(CargoInsert|CargoInsert[] cargos) returns SubmitSuccessResponse|SubmitConflictResponse {
         string[]|error submitCargoResult = submitCargo(cargos);
         if submitCargoResult is error {

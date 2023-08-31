@@ -14,6 +14,7 @@ import { postAPI } from '../../handlers/api_handler/ApiHandler';
 import { submitCargoUrl } from '../../handlers/api_handler/Constants';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from "@asgardeo/auth-react";
 
 
 const CreateCargoPage = () => {
@@ -23,11 +24,12 @@ const CreateCargoPage = () => {
   const [endFrom, setEndFrom] = useState('');
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const { getAccessToken } = useAuthContext();
 
   const handleSubmit = async event => {
     event.preventDefault();
-    console.log('Form submitted:', {volume, type, startFrom, endFrom});
-    const response = await postAPI(submitCargoUrl, { volume, type, startFrom, endFrom, cargoId: uuidv4(), eta: null, status: 'DOCKED'});
+    const response = await postAPI(submitCargoUrl, { volume, type, startFrom, endFrom, cargoId: uuidv4(), eta: null, status: 'DOCKED'}, {headers: {"Authorization" : `Bearer ${await getAccessToken()}`}}
+    );
     if (response.error) {
       setError(true);
     } else {
