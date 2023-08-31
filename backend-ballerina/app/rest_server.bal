@@ -1,3 +1,4 @@
+import ballerina/io;
 import ballerina/http;
 
 @http:ServiceConfig {
@@ -128,6 +129,7 @@ function informCargoPartners(string[] insertedCargoIds) returns error? {
             if res.statusCode == 202 {
                 return ();
             }
+            io:println("Error while informing cargo partners"+ res.statusCode.toBalString()+ res.reasonPhrase.toString());
             return error("Error while informing cargo partners"+ res.statusCode.toBalString()+ res.reasonPhrase.toString());
         }
     };

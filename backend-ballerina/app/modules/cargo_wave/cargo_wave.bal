@@ -10,7 +10,8 @@ listener http:Listener cargowaveListner = check new (9094);
     auth: [
         {
             oauth2IntrospectionConfig: {
-                url: "https://api.asgardeo.io/t/orgsd/oauth2/introspect"
+                url: "https://api.asgardeo.io/t/orgsd/oauth2/introspect",
+                tokenTypeHint: "access_token"
                 // clientConfig: {
                 //     secureSocket: {
                 //         cert: "https://api.asgardeo.io/t/orgsd/oauth2/jwks"
