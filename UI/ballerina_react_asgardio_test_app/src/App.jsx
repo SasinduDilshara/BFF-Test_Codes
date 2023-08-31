@@ -6,9 +6,16 @@ import { AuthProvider } from "@asgardeo/auth-react";
 import { asgardioConfig } from './handlers/auth_handler/asgardio_config';
 import CustomRouter from './routes';
 import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from './handlers/api_handler/config';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { getGraphQlUrl } from './handlers/api_handler/Constants';
 
 function App() {
+
+  const apolloClient = new ApolloClient({
+    uri: getGraphQlUrl,
+    cache: new InMemoryCache()
+  });
+
   return (
     <ApolloProvider client={apolloClient}>
       <Provider store={store} >
