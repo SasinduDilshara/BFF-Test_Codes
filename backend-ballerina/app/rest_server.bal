@@ -117,13 +117,18 @@ function informCargoPartners(string[] insertedCargoIds) returns error? {
             url = tradelogixListnerUrl;
         }
 
-        http:Client 'client = check new (url);
+        http:Client 'client = check new (url, auth = {
+            tokenUrl: getIssuer(),
+            clientId: getClientId(),
+            clientSecret: getClientSecret()
+        });
+        // http:Client 'client = check new (url);
         http:Response|error res = 'client->post("/submit", cargo);
         if res is http:Response {
             if res.statusCode == 202 {
                 return ();
             }
-            return error("Error while informing cargo partners");
+            return error("Error while informing cargo partners"+ res.statusCode.toBalString()+ res.reasonPhrase.toString());
         }
     };
 }
