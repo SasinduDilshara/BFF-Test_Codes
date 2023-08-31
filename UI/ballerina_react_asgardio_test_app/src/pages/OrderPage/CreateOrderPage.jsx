@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   TextField,
@@ -10,6 +10,7 @@ import { postAPI } from '../../handlers/api_handler/ApiHandler';
 import { submitOrderUrl } from '../../handlers/api_handler/Constants';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from "@asgardeo/auth-react";
 
 const CreateOrderPage = () => {
   const [date, setDate] = useState('');
@@ -17,6 +18,8 @@ const CreateOrderPage = () => {
   const [customerId, setUsername] = useState('');
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [token, setToken] = useState("");
+  const { getAccessToken, state } = useAuthContext();
 
   // const handleItemSelect = event => {
   //   const { value } = event.target;
@@ -27,7 +30,8 @@ const CreateOrderPage = () => {
     event.preventDefault();
     // Handle form submission here
     console.log('Form submitted:', { date, eta, customerId, totalAmount: 0, status: 'PENDING' });
-    const response = await postAPI(submitOrderUrl, { date, eta, customerId, totalAmount: 0, status: 'PENDING', shipId: null, orderId: uuidv4()});
+    console.log(await getAccessToken())
+    const response = await postAPI(submitOrderUrl, { date, eta, customerId, totalAmount: 0, status: 'PENDING', shipId: null, orderId: uuidv4()}, {token: await getAccessToken()});
     if (response.error) {
       setError(true);
     } else {

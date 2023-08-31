@@ -3,7 +3,20 @@ import ballerina/http;
 @http:ServiceConfig {
     cors: {
         allowOrigins: ["*"]
-    }
+    },
+    auth: [
+        {
+            jwtValidatorConfig: {
+                issuer: getIssuer(),
+                audience: getAudience(),
+                signatureConfig: {
+                    jwksConfig: {
+                        url: getJwksUrl()
+                    }
+                }
+            }
+        }
+    ]
 }
 service /submit on 'listener {
     resource function post 'order(OrderRecordInsert|OrderRecordInsert[] 'orders) returns SubmitSuccessResponse|SubmitConflictResponse {
